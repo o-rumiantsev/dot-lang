@@ -13,7 +13,11 @@ const config = {
         .mod('*')
     )
     .concat(new Token('\\*/')),
-  keyword: new Token('graph').or('digraph'),
+  keyword: new Token('graph')
+    .or('digraph')
+    .or('label')
+    .or('shape')
+    .or('color'),
   identifier: tokens.UNDERSCORE.or(tokens.LETTER).concat(
     tokens.UNDERSCORE
       .or(tokens.LETTER)
@@ -29,12 +33,14 @@ const config = {
     .or(tokens.CURLY_BRACKET_LEFT)
     .or(tokens.CURLY_BRACKET_RIGHT)
     .or(tokens.SQUARE_BRACKET_LEFT)
-    .or(tokens.SQUARE_BRACKET_RIGHT)
-    .or(tokens.ANGLE_BRACKET_LEFT)
-    .or(tokens.ANGLE_BRACKET_RIGHT),
+    .or(tokens.SQUARE_BRACKET_RIGHT),
   operator: tokens.ASSIGN
     .or(tokens.ARROW_LEFT)
-    .or(tokens.DASH.concat(tokens.DASH)),
+    .or(tokens.DASH.concat(tokens.DASH))
+    .or('remove_node')
+    .or('union')
+    .or('intersection'),
+  whitespace: new Token('\\s').mod('*'),
   priority: [
     'multi-line-comment',
     'one-line-comment',
@@ -42,6 +48,7 @@ const config = {
     'identifier',
     'operator',
     'punctuation',
+    'whitespace',
   ],
 };
 
@@ -61,11 +68,4 @@ graph B {
 }
 `);
 
-for (const token of lexer) {
-  console.log(token);
-}
-
-
-
-
-
+console.log([...lexer]);
