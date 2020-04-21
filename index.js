@@ -2,6 +2,7 @@
 
 const Token = require('./lib/token');
 const Lexer = require('./lib/lexer');
+const Syntaxer = require('./lib/syntaxer');
 
 const tokens = {
   ANY: new Token('.'),
@@ -36,5 +37,6 @@ const tokens = {
 module.exports = {
   Token,
   Lexer,
+  Syntaxer,
   tokens,
 };
