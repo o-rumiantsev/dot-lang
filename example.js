@@ -1,6 +1,6 @@
 'use strict';
 
-const { Token, Lexer, tokens } = require('.');
+const { Token, Lexer, Syntaxer, tokens } = require('.');
 
 const config = {
   'one-line-comment': new Token('//.*'),
@@ -15,9 +15,7 @@ const config = {
     .concat(new Token('\\*/')),
   keyword: new Token('graph')
     .or('digraph')
-    .or('label')
-    .or('shape')
-    .or('color'),
+    .or('label'),
   identifier: tokens.UNDERSCORE.or(tokens.LETTER).concat(
     tokens.UNDERSCORE
       .or(tokens.LETTER)
@@ -45,8 +43,8 @@ const config = {
     'multi-line-comment',
     'one-line-comment',
     'keyword',
-    'identifier',
     'operator',
+    'identifier',
     'punctuation',
     'whitespace',
   ],
@@ -59,13 +57,21 @@ digraph A {
    This is definition of
    directed edge 
   */
-  a -> b;
+  a [label=nodeA];
+  
+  a -> b [label=done];
   b -> c;
 }
 
 graph B {
-  a, b, c /* this is shorthand */ -- d;
+  a /* edge in  */ -- d;
 }
+
+graph C union(A, B)
+graph D remove_node(A, a)
 `);
 
-console.log([...lexer]);
+const syntaxer = new Syntaxer([...lexer]);
+const ast = syntaxer.parse();
+
+console.dir(ast, { depth: null });
