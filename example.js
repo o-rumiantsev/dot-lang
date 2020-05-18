@@ -1,6 +1,6 @@
 'use strict';
 
-const { Token, Lexer, Syntaxer, tokens } = require('.');
+const { Token, Lexer, Syntaxer, Analyser, tokens } = require('.');
 
 const config = {
   'one-line-comment': new Token('//.*'),
@@ -58,20 +58,20 @@ digraph A {
    directed edge 
   */
   a [label=nodeA];
-  
   a -> b [label=done];
-  b -> c;
+  b -> c -> d -> b;
 }
 
-graph B {
-  a /* edge in  */ -- d;
+digraph B {
+  a /* edge in  */ -> b;
+  a -> e;
 }
 
-graph C union(A, B)
-graph D remove_node(A, a)
+graph C intersection(A, B)
 `);
 
 const syntaxer = new Syntaxer([...lexer]);
 const ast = syntaxer.parse();
+const analyser = new Analyser(ast);
 
-console.dir(ast, { depth: null });
+console.dir(analyser.graphs, { depth: null });
