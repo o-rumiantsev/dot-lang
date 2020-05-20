@@ -1,6 +1,13 @@
 'use strict';
 
-const { Token, Lexer, Syntaxer, Analyser, tokens } = require('.');
+const {
+  Token,
+  Lexer,
+  Syntaxer,
+  Analyser,
+  jsonGenerator,
+  tokens,
+} = require('.');
 
 const config = {
   'one-line-comment': new Token('//.*'),
@@ -73,5 +80,6 @@ graph C intersection(A, B)
 const syntaxer = new Syntaxer([...lexer]);
 const ast = syntaxer.parse();
 const analyser = new Analyser(ast);
+const jsonGraphs = jsonGenerator(analyser.graphs);
 
-console.dir(analyser.graphs, { depth: null });
+console.dir(JSON.parse(jsonGraphs), { depth: null });
